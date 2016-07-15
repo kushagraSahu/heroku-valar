@@ -374,13 +374,14 @@ def download_all_videos_playlist(request):
 					break
 			webbrowser.open(download_links['high_quality_video'])
 
+	return HttpResponse()
+
 @require_GET
 def download_partial_videos_playlist(request):
 	if request.is_ajax:
 		search_url = request.GET.get('playlist_url','')
 		index_videos = request.GET.getlist('index_videos','')
-		for index in index_videos:
-			index = str(index)
+		index_videos=[str(x) for x in index_videos]
 		print (index_videos)
 		response = requests.get(search_url)
 		soup = BeautifulSoup(response.text, 'lxml')
@@ -402,9 +403,8 @@ def download_partial_videos_playlist(request):
 		print(list_watch_urls)
 
 		for url in list_watch_urls:
-			while True:
-				download_links = get_download_links(url)
-				if download_links != None:
-					break
+			download_links = get_download_links(url)	
 			webbrowser.open(download_links['high_quality_video'])
+
+		return HttpResponse()
 
