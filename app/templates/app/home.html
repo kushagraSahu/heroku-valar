@@ -1,0 +1,51 @@
+{% load staticfiles %}
+<html>
+<head>
+	<title>Valar Downloadis</title>
+	<link rel="shortcut icon" href="{% static 'app/images/title1.png' %}" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+	<link href = "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+	<link href='https://fonts.googleapis.com/css?family=Montserrat:700' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="{% static 'app/css/home.css' %}" />
+</head>
+<body>
+	<div id="bg">
+		<img src="{% static "app/images/House.png" %}" alt="">
+	</div>
+	<div id="Home">
+		<div id="p1">
+			<a href="{% url 'home' %}"><p>VALAR DOWNLOADIS.</p></a>
+		</div>
+		<div id="p2"><p>ALL MEN MUST DOWNLOAD.</p></div>
+		<div id="buttons2">
+			<div id="btn">
+				<a class="waves-effect waves-light btn-large" href="{% url 'video' %}">Download a Video</a>
+			</div>
+			<div id="btn">
+				<a class="waves-effect waves-light btn-large" href="{% url 'playlist' %}">Download a Playlist</a>
+			</div>
+		</div>
+	</div>
+	
+<!-- <div id="banner">
+  	<div class="wrap-center">
+		<div class="banner-centered" id="banner-text">
+			<h2><strong>ValarDownloadis</strong></h2>
+		</div>
+	</div>
+</div> -->
+
+<!-- <script>
+	function onBodyLoad(){
+			home.init();
+		}
+		window.addEventListener('load', onBodyLoad)
+	</script> -->
+</body>
+
+{% include 'common/footer.html' %}
+
+</html>

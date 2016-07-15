@@ -1,0 +1,141 @@
+{% load staticfiles %}
+<html>
+<head>
+	<title>Search Video</title>
+	<link rel="shortcut icon" href="{% static 'app/images/title1.png' %}" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+	<link href = "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+	<link href='https://fonts.googleapis.com/css?family=Montserrat:700' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+</head>
+<body>
+	<style>
+		#bg {
+			position: fixed; 
+			top: -50%; 
+			left: -50%; 
+			width: 200%; 
+			height: 200%;
+			z-index: -2;
+		}
+		#bg img {
+			position: absolute; 
+			top: 0; 
+			left: 0; 
+			right: 0; 
+			bottom: 0; 
+			margin: auto; 
+			min-width: 50%;
+			min-height: 50%;
+		}
+		.home p{
+			text-align: center;
+			font-size: 70px;
+			font-family: "Montserrat", sans-serif;
+			font-weight: bolder;
+			color: white;
+		}
+		.home {
+			padding-top: 4%;
+			margin-bottom: 3%;
+			height: 30%
+		}
+
+		#icon_prefix{
+			text-align: center;
+			padding-top: 3%;
+			font-size: 22px;
+			font-family: "Montserrat", sans-serif;
+			color: white;
+			font-weight: lighter;
+		}
+		label{
+			padding-top: 3%;
+			font-size: 26px;
+			font-family: "Montserrat", sans-serif;
+			color: white;
+			font-weight: lighter;
+			text-align: center;
+		}
+		#or {
+			margin-top: 7%; 
+		}
+		#or p{
+			text-align: center;
+			font-family: "Montserrat", sans-serif;
+			font-weight: bolder;
+			color: white;
+			font-size:30px
+		}
+		nav{
+			position: fixed;
+			color: #fff;
+			background-color: rgba(200, 135, 104, 0.60);
+			width: 100%;
+			top: 0;
+			text-align: center;
+			z-index: 3;
+			font-family: "Montserrat", sans-serif;
+			font-weight: bolder;
+			color: white;
+		}
+		#footer {
+			position: fixed;
+		}
+		@media screen and (max-width: 1000px) {
+			.home{
+				height: 35%;
+			}
+			#row1{
+				margin-top: 4%;
+			}
+		}
+		
+	</style>
+	
+	<nav>
+		<div class="nav-wrapper">
+			<div class="col s12">
+				<a href="{% url 'home' %}" class="breadcrumb">Home</a>
+				<a href="{% url 'video' %}" class="breadcrumb">Video</a>
+			</div>
+		</div>
+	</nav>
+	<div class="home">
+		<p><a href="{% url 'home' %}" style="color:white;font-size:95%">VALAR SEARCHULIS.</a></p>
+	</div>
+	<div id = "row1" class="row" style="margin-bottom:2%">
+		<form class ="input-field col m12 s12 l10 offset-l1" action="{% url 'download-video' %}" method="GET">
+			<input id="icon_prefix" type="text" name="search" autocomplete="off" class="validate" spellcheck="false" onkeypress="loadingToast(event)" placeholder="Eg- Sky full of Stars,Tvf,Friends best scenes,Bob Dylan,Hey Jude,Game of Thrones,etc">
+			<label for="icon_prefix" style="font-size:26px;color:white">Search Video</label>
+		</form>
+	</div>
+	<div id ="or">
+		<p>OR</p>
+	</div>
+	<div class="row" style="margin-top:2%" >
+		<form class ="input-field col m12 s12 l10 offset-l1" action="{% url 'download-video' %}" method="GET">
+			<input id="icon_prefix" type="url" name="url" autocomplete="off" class="validate" spellcheck="false" style="font-size:22px">
+			<label for="icon_prefix" style="font-size:22px;color:white">Insert YouTube Video Link (Eg- https://www.youtube.com/watch?v=T94PHkuydcw)</label>
+		</form>
+	</div>
+	<div id="bg">
+		<img src="{% static "app/images/Elegant_Background-12.jpg" %}" alt="">
+	</div>
+	<script>
+		function loadingToast(e){
+			if (e.keyCode == 13) {
+				setInterval(function(){console.log('hi')}, 1000)
+				setTimeout(function(){
+					setInterval(function(){
+						Materialize.toast('Loading the results in a moment :)',6000,'rounded')
+					},5000)
+				},8000)
+			}
+		}
+	</script>
+</body>
+{% include 'common/footer.html' %}
+</html>

@@ -1,0 +1,132 @@
+{% load staticfiles %}
+<html>
+<head>
+	<title>Search Playlist</title>
+	<link rel="shortcut icon" href="{% static 'app/images/title1.png' %}" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+	<link href = "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+	<link href='https://fonts.googleapis.com/css?family=Montserrat:700' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>t>
+	<script src="{% static 'app/js/playlist.js' %}"></script>
+</head>
+<body>
+	<style>
+		#bg {
+			position: fixed; 
+			top: -50%; 
+			left: -50%; 
+			width: 200%; 
+			height: 200%;
+			z-index: -2;
+		}
+		#bg img {
+			position: absolute; 
+			top: 0; 
+			left: 0; 
+			right: 0; 
+			bottom: 0; 
+			margin: auto; 
+			min-width: 50%;
+			min-height: 50%;
+		}
+		.home p {
+			text-align: center;
+			font-size: 70px;
+			font-family: "Montserrat", sans-serif;
+			font-weight: bolder;
+			color: white;
+		}
+		.home {
+			padding-top: 2%;
+			margin-bottom: 1%;
+			height: 22%
+		}
+
+		#icon_prefix{
+			text-align: center;
+			padding-top: 3%;
+			font-size: 22px;
+			font-family: "Montserrat", sans-serif;
+			color: white;
+			font-weight: lighter;
+		}
+		label{
+			padding-top: 3%;
+			font-size: 20px;
+			font-family: "Montserrat", sans-serif;
+			color: white;
+			text-align: center;
+			font-weight: lighter;
+		}
+		nav{
+			position: fixed;
+			color: #fff;
+			background-color: rgba(17, 153, 198, 0.5);
+			width: 100%;
+			top: 0;
+			text-align: center;
+			z-index: 3;
+			font-family: "Montserrat", sans-serif;
+			font-weight: bolder;
+			color: white;
+		}
+		#btn {
+			background-color: rgba(17, 153, 198, 0.5);
+			font-family: "Montserrat", sans-serif;
+			font-weight: bolder;
+			color: white;
+			height: 8%;
+			border-radius: 28px 28px;
+		}
+		#footer {
+			position: fixed;
+		}
+		@media screen and (max-width: 1000px) {
+			.home{
+				height: 30%;
+			}
+			#row1{
+				margin-top: 4%;
+			}
+		}	
+	</style>
+	
+	<nav>
+		<div class="nav-wrapper">
+			<div class="col s12">
+				<a href="{% url 'home' %}" class="breadcrumb">Home</a>
+				<a href="{% url 'video' %}" class="breadcrumb">Playlist</a>
+			</div>
+		</div>
+	</nav>
+	<div class="home">
+		<p style="text-align: center;font-size: 70px;font-family: "Montserrat", sans-serif;font-weight: bolder;color: white;">
+			<a href="{% url 'home' %}" style="color:white;font-size:95%">VALAR SEARCHULIS.</a>
+		</p>
+	</div>
+	<div class="row" style="padding-top:4%;">
+		<form class ="input-field col m8 s12 l10 offset-l1 offset-m2" >
+			<input id="icon_prefix" type="url" name="url" autocomplete="off" class="validate" spellcheck="false" placeholder="Eg- https://www.youtube.com/playlist?list=PLsvoYlzBrLFCjoOHHOiljjg1jdBB2-PlH">
+			<label for="icon_prefix" style="font-size:22px;color:white">Insert YouTube Playlist Link</label>
+		</form>
+	</div>
+	<div style="text-align:center;">
+		<button type="button" class="btn btn-secondary btn-lg" id="btn">Search
+			<i class="fa fa-search" aria-hidden="true"></i>
+		</button>
+	</div>
+	<div id="bg">
+		<img src="{% static "app/images/Elegant_Background-9.jpg" %}" alt="">
+	</div>
+	<script>
+		function onBodyLoad(){
+			playlist.init();
+		}
+		window.addEventListener('load',onBodyLoad);
+
+	</script>
+</body>
+{% include 'common/footer.html' %}
+</html>

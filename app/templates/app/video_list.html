@@ -1,0 +1,128 @@
+{% load staticfiles %}
+<html>
+<head>
+	<title>Download Video</title>
+	<link rel="shortcut icon" href="{% static 'app/images/title1.png' %}" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+	<link href = "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+	<link href='https://fonts.googleapis.com/css?family=Montserrat:700' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+</head>
+<body>
+	<style>
+		#bg {
+			position: fixed; 
+			top: -50%; 
+			left: -50%; 
+			width: 200%; 
+			height: 200%;
+			z-index: -2;
+		}
+		#bg img {
+			position: absolute; 
+			top: 0; 
+			left: 0; 
+			right: 0; 
+			bottom: 0; 
+			margin: auto; 
+			min-width: 50%;
+			min-height: 50%;
+		}
+		.home {
+			margin-top: 2%;
+		}
+
+		.home p {
+			text-align: center;
+			padding-top: 5%;
+			font-size: 70px;
+			font-family: "Montserrat", sans-serif;
+			font-weight: bolder;
+			color: white;
+		}
+		nav{
+			position: fixed;
+			color: #fff;
+			background-color: rgba(149, 70, 119, 0.74);
+			width: 100%;
+			top:0;
+			text-align: center;
+			z-index: 3;
+			font-family: "Montserrat", sans-serif;
+			font-weight: bolder;
+			color: white;
+		}
+		.home {
+			height: 30%;
+		}
+		#back a{
+			background-color: rgba(149, 70, 119, 0.74);
+			font-family: "Montserrat", sans-serif;
+			font-weight: bolder;
+			color: white;
+		}
+		@media screen and (max-width: 600px) {
+			.home {
+				height: 15%;
+			}
+		}
+	</style>
+	<!-- <img src={% static "app/images/Elegant_Background-13.jpg" %}> -->
+
+	<nav>
+		<div class="nav-wrapper">
+			<div class="col s12">
+				<a href="{% url 'home' %}" class="breadcrumb">Home</a>
+				<a href="{% url 'video' %}" class="breadcrumb">Video</a>
+				<a href="#" class="breadcrumb">Download</a>
+			</div>
+		</div>
+	</nav>
+	<div class="home">
+		<p><a href="{% url 'home' %}" style="color:white;"">VALAR DOHAERIS.</a></p>
+	</div>
+	{% if not list_videos %}
+	<p>OOPS. Connection Timed Out</p>
+	{% endif %}
+	{% for video in list_videos %}
+	<div class="row">
+		<div class="col s12 m8 l4 offset-l4 offset-m2">
+			<div class="card">
+				<div class="card-image">
+					<img src= "{{ video.thumbnail }}">
+				</div>
+				<div class="card-content">
+					<h5>{{ video.title }} </h5>
+					<p style="font-size:20px">Duration - {{ video.time }}</p>
+					<p style="font-size:20px">Youtube views - {{ video.views }}</p>
+					<p style="font-size:20px"><a href="{{ video.watch_link }}" target="_blank">Watch on YouTube - <i class="fa fa-youtube-play" aria-hidden="true"></i></a></p>
+				</div>
+				<div class="card-action" style="text-align:center;">
+					<a href="{{ video.highq_link }}" onclick="thanksToast(event)" style="justify-content:center">High Quality Download</a>
+					<a href="{{ video.lowq_link }}" onclick="thanksToast(event)" style="justify-content:center">Low Quality Download</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% endfor %}
+	<div id="bg">
+		<img src="{% static "app/images/Elegant_Background-13.jpg" %}" alt="">
+	</div>
+	<div id="back" style="margin-bottom: 2%;">
+		<a class="waves-effect waves-light btn-large" style="width:33.3%;left: 33.3%" href="javascript:history.back()">Go Back<i class="fa fa-arrow-left" aria-hidden="true"></i></a>
+	</div>
+	<script>
+		function thanksToast(e){
+			setTimeout(function(){
+				Materialize.toast('Valar Downloadis ;)', 20000, 'rounded')
+			}, 2000);
+			setTimeout(function(){
+				Materialize.toast('Ready for the next Video or maybe a Playlist?', 16000, 'rounded')
+			}, 4000);
+		}
+	</script>
+</body>
+{% include 'common/footer.html' %}
+</html>
