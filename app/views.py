@@ -1,15 +1,12 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, Http404, JsonResponse
-from django.views.decorators.http import require_GET, require_POST, require_http_methods
-from django.views.decorators.csrf import csrf_exempt
-from django.core import serializers
+from django.views.decorators.http import require_GET, require_POST
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
 import requests
 import webbrowser
 import time
 import re
-import dryscrape
 from bs4 import BeautifulSoup
 from django.core.urlresolvers import resolve
 
@@ -18,7 +15,9 @@ from django.core.urlresolvers import resolve
 #global variables
 base_youtube_watch = 'https://www.youtube.com'
 base_yt_url = 'https://www.youtube.com/results?search_query='
-base_ss_url = 'https://www.ssyoutube.com'
+base_savedeo_url = 'https://savedeo.com/download?url='
+base_alternate_url = 'https://youtubemultidownloader.com'
+# base_ss_url = 'https://www.ssyoutube.com'
 global flag_stay_video
 
 global hit_threshold
@@ -34,112 +33,166 @@ def video(request):
 def playlist(request):
 	return render(request, 'app/playlist.html')
 
+# Save from Net Scraping using dryscrape.
+# def get_download_links(watch_url):
+# 	print("Yo")
+# 	global hit_threshold
+# 	global flag_stay_video
+# 	abort = False
+# 	abort_override = False
+# 	download_url = base_ss_url + watch_url
+# 	session2 = dryscrape.Session()
+# 	session2.visit(download_url)
+# 	time.sleep(2)
+# 	response=session2.body()
+# 	soup = BeautifulSoup(response,"lxml")
+# 	sf_result = soup.find('div', {'class':'wrapper'}).find('div', {'class':'downloader-2'}).find('div',{'id':'sf_result'})
+	
+# 	hit_count = 1
+# 	while True:
+# 		print(hit_count)
+# 		print("Inside3")
+# 		if hit_count > hit_threshold:
+# 			abort_override = True
+# 			break
+# 		media_result = sf_result.find('div', {'class':'media-result'})
+# 		if media_result != None:
+# 			info_box = media_result.find('div', {'class': 'info-box'})
+# 			break
+# 		else:
+# 			session2 = dryscrape.Session()
+# 			session2.visit(download_url)
+# 			response=session2.body()
+# 			soup = BeautifulSoup(response,"lxml")
+# 			sf_result = soup.find('div', {'class':'wrapper'}).find('div', {'class':'downloader-2'}).find('div',{'id':'sf_result'})
+# 		hit_count += 1
+	
+# 	if not abort_override:
+# 		print("Hello")
+# 		dropdown_box_list = info_box.find('div', {'class': 'link-box'}).find('div', {'class': 'drop-down-box'}).find('div', {'class': 'list'}).find('div', {'class': 'links'})
+# 		download_link_groups = dropdown_box_list.findAll('div', {'class': 'link-group'})
+# 		i=0
+# 		list_links = []
+# 		for group in download_link_groups:
+# 			download_links = group.findAll('a')
+# 			for link in download_links:
+# 				download = str(link['download'])
+# 				extension = re.split(r'\.(?!\d)', download)[-1]
+# 				class_link = link['class']
+# 				if class_link[0] != "no-audio":
+# 					if extension == "mp4":
+# 						i+=1
+# 						video_format = link['title']
+# 						list_links.append(link)
+# 						print(str(i) + ". " + download + ", " + str(video_format) + ", Youtube Views: ")
+			
+# 		print(list_links)
+# 		high_quality_link = list_links[0]
+# 		to_download = high_quality_link
+# 		to_download_url = to_download['href']
+# 		highq_download_url = to_download_url
+# 		if len(list_links) != 1:
+# 			lowq_download_link = list_links[1]
+# 			to_download = lowq_download_link
+# 			to_download_url = to_download['href']
+# 			lowq_download_url = to_download_url
+# 		else:
+# 			lowq_download_url =  highq_download_url	
+			
+# 		download_urls = {
+# 			'high_quality_video': highq_download_url,
+# 			'low_quality_video' : lowq_download_url
+# 		}
+# 		return download_urls
+# 	else:
+# 		return None
+
+# Scraping from Savdeo using just BS. 
 def get_download_links(watch_url):
-	print("Yo")
-	global hit_threshold
-	global flag_stay_video
-	abort = False
-	abort_override = False
-	download_url = base_ss_url + watch_url
-	session2 = dryscrape.Session()
-	session2.visit(download_url)
-	time.sleep(2)
-	response=session2.body()
-	soup = BeautifulSoup(response,"lxml")
-	sf_result = soup.find('div', {'class':'wrapper'}).find('div', {'class':'downloader-2'}).find('div',{'id':'sf_result'})
-	
-	hit_count = 1
-	while True:
-		print(hit_count)
-		print("Inside3")
-		if hit_count > hit_threshold:
-			abort_override = True
-			break
-		media_result = sf_result.find('div', {'class':'media-result'})
-		if media_result != None:
-			info_box = media_result.find('div', {'class': 'info-box'})
-			break
+	download_url = base_savedeo_url + base_youtube_watch + watch_url
+	print(download_url)
+	response = requests.get(download_url)
+	soup = BeautifulSoup(response.text, 'lxml')
+	try:
+		table = soup.find('div',{'class':'clip'}).find('table')
+		table_body = table.find('tbody')
+		list_links = table_body.findAll('tr')
+		list_download_links = []
+		
+		i=0 
+		for link in list_links:
+			video_format = link.findAll('td')[0].text
+			if video_format == "mp4":
+				download_link = link.findAll('td')[1].find('a')['href']
+				list_download_links.append(download_link)
+			i+=1
+			if i>1:
+				break
+		
+		highq_download_url = list_download_links[0]
+		
+		if len(list_download_links) != 1:
+			lowq_download_url = list_download_links[1]
 		else:
-			session2 = dryscrape.Session()
-			session2.visit(download_url)
-			response=session2.body()
-			soup = BeautifulSoup(response,"lxml")
-			sf_result = soup.find('div', {'class':'wrapper'}).find('div', {'class':'downloader-2'}).find('div',{'id':'sf_result'})
-		hit_count += 1
-	
-	if not abort_override:
-		print("Hello")
-		dropdown_box_list = info_box.find('div', {'class': 'link-box'}).find('div', {'class': 'drop-down-box'}).find('div', {'class': 'list'}).find('div', {'class': 'links'})
-		download_link_groups = dropdown_box_list.findAll('div', {'class': 'link-group'})
-		i=0
-		list_links = []
-		for group in download_link_groups:
-			download_links = group.findAll('a')
-			for link in download_links:
-				download = str(link['download'])
-				extension = re.split(r'\.(?!\d)', download)[-1]
-				class_link = link['class']
-				if class_link[0] != "no-audio":
-					if extension == "mp4":
-						i+=1
-						video_format = link['title']
-						list_links.append(link)
-						print(str(i) + ". " + download + ", " + str(video_format) + ", Youtube Views: ")
-			
-		print(list_links)
-		high_quality_link = list_links[0]
-		to_download = high_quality_link
-		to_download_url = to_download['href']
-		highq_download_url = to_download_url
-		if len(list_links) != 1:
-			lowq_download_link = list_links[1]
-			to_download = lowq_download_link
-			to_download_url = to_download['href']
-			lowq_download_url = to_download_url
-		else:
-			lowq_download_url =  highq_download_url	
-			
+			lowq_download_url = highq_download_url
+
 		download_urls = {
 			'high_quality_video': highq_download_url,
 			'low_quality_video' : lowq_download_url
 		}
-		return download_urls
-	else:
-		return None
+	except:
+		download_url = base_alternate_url + watch_url
+		print(download_url)
+		response=requests.get(download_url)
+		soup = BeautifulSoup(response.text,"lxml")
+		result = soup.find('div',{'id':'Download_Quality'}).find('ul',{'class':'list-group'})
+		list_download_links = result.findAll('li',{'class':'list-group-item'})[1].findAll('a')
+		if list_download_links[0].text == "720P" or list_download_links[0].text == "360P":
+			highq_download_url = list_download_links[0]['href']
+		if list_download_links[1].text == "360P":
+			lowq_download_url = list_download_links[1]['href']
+		else:
+			lowq_download_url = highq_download_url
+
+		download_urls = {
+			'high_quality_video': highq_download_url,
+			'low_quality_video' : lowq_download_url
+		}
+
+	return download_urls
+
 
 @require_GET
 def download_video(request):
 	global hit_threshold
 	abort_override = False
-	query_range = 3
+	query_range = 2
 	refresh_search_range = 2
 	search = request.GET.get('search', '')
 	if search:
 		for i in range(0,refresh_search_range):
 			search_url = base_yt_url + search
-			session1 = dryscrape.Session()
-			session1.visit(search_url)
-			response=session1.body()
-			soup = BeautifulSoup(response,"lxml")
+			response = requests.get(search_url)
+			soup = BeautifulSoup(response.text,"lxml")
 			list_results = soup.find('div', {'id': 'results'}).find('ol',{'class':'section-list'}).find('ol',{'class':'item-section'}).findAll('li')
 			watch_result_list = []
 			i=0
 			for result in list_results:
-				print(i)
 				if result.find('div', {'class': 'pyv-afc-ads-container'}):
 					continue
+				elif result.find('div', {'class': re.compile(r'yt-lockup-channel')}) != None:
+					continue
+				elif result.find('div', {'class': re.compile(r'yt-lockup-playlist')}) != None:
+					continue
 				else:
-					print("Inside")
 					hit_count = 1
 					while True:
-						print(hit_count)
 						if hit_count > hit_threshold:
 							abort_override = True
 							break
 						watch_result = result.find('div', {'class': "yt-lockup-content"})
 						if watch_result != None:
 							i+=1
-							print(watch_result)
 							watch_result_list.append(watch_result)
 							break
 						hit_count += 1
@@ -152,15 +205,15 @@ def download_video(request):
 			thumbnail_video_list = []
 			i=0
 			for result in list_results:
-				print(i)
 				if result.find('div', {'class': 'pyv-afc-ads-container'}):
 					continue
+				elif result.find('div', {'class': re.compile(r'yt-lockup-channel')}) != None:
+					continue
+				elif result.find('div', {'class': re.compile(r'yt-lockup-playlist')}) != None:
+					continue
 				else:
-					print("Inside2")
 					hit_count = 1
 					while True:
-						print(hit_count)
-						print("in2")
 						if hit_count > hit_threshold:
 							abort_override = True
 							break
@@ -186,16 +239,18 @@ def download_video(request):
 				while True:
 					if hit_count > hit_threshold:
 						break
-					video_views_no_text = watch_result_list[i].find('ul', {'class': 'yt-lockup-meta-info'})
-					if video_views_no_text != None:
-						try:
-							video_views = video_views_no_text.findAll('li')[1].text
-						except:
-							bool_views = True
-						break
-					hit_count+=1
+					try:
+						video_views_no_text = watch_result_list[i].find('ul', {'class': 'yt-lockup-meta-info'})
+						if video_views_no_text != None:
+							try:
+								video_views = video_views_no_text.findAll('li')[1].text
+							except:
+								bool_views = True
+							break
+						hit_count+=1
+					except:
+						bool_views = True
 				if hit_count > hit_threshold or bool_views:
-					print("BC")
 					continue
 				video_views = video_views.split()[0]
 				watch_url = watch_result_list[i].find('h3', {'class': 'yt-lockup-title'}).find('a')['href']
@@ -324,6 +379,7 @@ def download_partial_videos_playlist(request):
 	if request.is_ajax:
 		search_url = request.GET.get('playlist_url','')
 		index_videos = request.GET.getlist('index_videos','')
+		print(index_videos)
 		response = requests.get(search_url)
 		soup = BeautifulSoup(response.text, 'lxml')
 		content = soup.find('div',{'id': 'page-container'}).find('div',{'id': 'content'}).find('div',{'class': 'branded-page-v2-col-container'})
@@ -337,8 +393,10 @@ def download_partial_videos_playlist(request):
 			if str(index) in index_videos:
 				video = tr.find('td', {'class': 'pl-video-title'}).find('a')
 				watch_url = video['href']
+				watch_url = watch_url.split('&')[0]
 				list_watch_urls.append(watch_url)
 			index+=1
+		print("holo")
 		print(list_watch_urls)
 
 		for url in list_watch_urls:
