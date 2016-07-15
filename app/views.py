@@ -403,8 +403,8 @@ def download_partial_videos_playlist(request):
 		print(list_watch_urls)
 
 		for url in list_watch_urls:
-			download_links = get_download_links(url)	
+			download_links = get_download_links(url)
+			print("downloading")
 			webbrowser.open(download_links['high_quality_video'])
 
-		return HttpResponse()
 
