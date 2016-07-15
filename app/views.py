@@ -379,7 +379,7 @@ def download_partial_videos_playlist(request):
 	if request.is_ajax:
 		search_url = request.GET.get('playlist_url','')
 		index_videos = request.GET.getlist('index_videos','')
-		print(index_videos)
+		print (index_videos)
 		response = requests.get(search_url)
 		soup = BeautifulSoup(response.text, 'lxml')
 		content = soup.find('div',{'id': 'page-container'}).find('div',{'id': 'content'}).find('div',{'class': 'branded-page-v2-col-container'})
@@ -390,7 +390,7 @@ def download_partial_videos_playlist(request):
 		index = 1
 		for tr in list_videos:
 			#Checking whether index is in the list provided by the user.
-			if str(index) in index_videos:
+			if index in index_videos:
 				video = tr.find('td', {'class': 'pl-video-title'}).find('a')
 				watch_url = video['href']
 				watch_url = watch_url.split('&')[0]
