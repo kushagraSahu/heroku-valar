@@ -2,20 +2,50 @@ var playlistDownload = (function(){
 	var playlist_url = "";
 	function downloadAll(e){
 		e.preventDefault();
-		setTimeout(function(){Materialize.toast('Starting download in a moment :)', 20000, 'rounded')},2000);
-		setTimeout(function(){Materialize.toast('Enjoy your videos :)', 20000, 'rounded')},24000);
+		setTimeout(function(){Materialize.toast('This may take some time. Be patient', 25000, 'rounded')},2000);
+		var input = $("input[id='mycheckbox']")
+		var index_list=[];
+		for(var i=0;i<input.length/2;i++){
+			index_list.push(i+1)
+		}
 		$.ajax({
-			url : window.location.origin + "/playlist/download/all",
+			url : window.location.origin + "/playlist/download/partial",
 			method : 'GET',
+			//To send a list through ajax, traditional = true
+			traditional: true,
 			data : {
 				'playlist_url' : playlist_url,
+				'index_videos' : index_list,
 			},
 			datatype : 'json',
 			success : function(response){
 				list_videos = response.list_downloads
 				for(i=0;i<list_videos.length;i++){
-					window.open(list_videos[i])
+					window.open(list_videos[i],'_blank')
+					self.focus()
 				}
+				var index_list=[];
+				for(var i=input.length/2;i<input.length;i++){
+					index_list.push(i+1)
+				}
+				$.ajax({
+					url : window.location.origin + "/playlist/download/partial",
+					method : 'GET',
+					//To send a list through ajax, traditional = true
+					traditional: true,
+					data : {
+						'playlist_url' : playlist_url,
+						'index_videos' : index_list,
+					},
+					datatype : 'json',
+					success : function(response){
+						list_videos = response.list_downloads
+						for(i=0;i<list_videos.length;i++){
+							window.open(list_videos[i],'_blank')
+							self.focus()
+						}
+					}
+				})
 			}
 		})
 	}
@@ -63,7 +93,7 @@ var playlistDownload = (function(){
 		for(i=5;i<query.length;i++){
 			playlist_url = playlist_url + query[i];
 		}
-		Materialize.toast('Please disable POP-UP BLOCK for this website. Thanks', 22000, 'rounded')
+		Materialize.toast('Please disable POP-UP BLOCK for this website. Thanks', 20000, 'rounded')
 		button_all = document.getElementById('btn-all');
 		button_all.addEventListener('click',downloadAll)
 		button_some = document.getElementById('btn');
