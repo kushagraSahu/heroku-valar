@@ -2,52 +2,178 @@ var playlistDownload = (function(){
 	var playlist_url = "";
 	function downloadAll(e){
 		e.preventDefault();
-		setTimeout(function(){Materialize.toast('This may take some time. Be patient', 25000, 'rounded')},2000);
+		setTimeout(function(){Materialize.toast('This may take some time. Be patient', 35000, 'rounded')},2000);
 		var input = $("input[id='mycheckbox']")
-		var index_list=[];
-		for(var i=0;i<input.length/2;i++){
-			index_list.push(i+1)
-		}
-		$.ajax({
-			url : window.location.origin + "/playlist/download/partial",
-			method : 'GET',
-			//To send a list through ajax, traditional = true
-			traditional: true,
-			data : {
-				'playlist_url' : playlist_url,
-				'index_videos' : index_list,
-			},
-			datatype : 'json',
-			success : function(response){
-				list_videos = response.list_downloads
-				for(i=0;i<list_videos.length;i++){
-					window.open(list_videos[i],'_blank')
-					self.focus()
-				}
-				var index_list=[];
-				for(var i=input.length/2;i<input.length;i++){
-					index_list.push(i+1)
-				}
-				$.ajax({
-					url : window.location.origin + "/playlist/download/partial",
-					method : 'GET',
-					//To send a list through ajax, traditional = true
-					traditional: true,
-					data : {
-						'playlist_url' : playlist_url,
-						'index_videos' : index_list,
-					},
-					datatype : 'json',
-					success : function(response){
-						list_videos = response.list_downloads
-						for(i=0;i<list_videos.length;i++){
-							window.open(list_videos[i],'_blank')
-							self.focus()
-						}
-					}
-				})
+		if (input.length <= 16){
+			console.log("<16")
+			var index_list=[];
+			for(var i=0;i<input.length;i++){
+				index_list.push(i+1)
 			}
-		})
+			console.log(index_list)
+			$.ajax({
+				url : window.location.origin + "/playlist/download/partial",
+				method : 'GET',
+				//To send a list through ajax, traditional = true
+				traditional: true,
+				data : {
+					'playlist_url' : playlist_url,
+					'index_videos' : index_list,
+				},
+				datatype : 'json',
+				success : function(response){
+					list_videos = response.list_downloads
+					for(i=0;i<list_videos.length;i++){
+						window.open(list_videos[i],'_blank')
+						self.focus()
+					}
+				}
+			})
+		}
+		else if (input.length > 16 & input.length <= 32){
+			console.log(">16")
+			var index_list=[];
+			for(var i=0;i<input.length/2;i++){
+				index_list.push(i+1)
+			}
+			console.log(index_list)
+			$.ajax({
+				url : window.location.origin + "/playlist/download/partial",
+				method : 'GET',
+				//To send a list through ajax, traditional = true
+				traditional: true,
+				data : {
+					'playlist_url' : playlist_url,
+					'index_videos' : index_list,
+				},
+				datatype : 'json',
+				success : function(response){
+					list_videos = response.list_downloads
+					for(i=0;i<list_videos.length;i++){
+						window.open(list_videos[i],'_blank')
+						self.focus()
+					}
+					var index_list=[];
+					for(var i=Math.ceil(input.length/2);i<input.length;i++){
+						index_list.push(i+1)
+					}
+					console.log(index_list)
+					$.ajax({
+						url : window.location.origin + "/playlist/download/partial",
+						method : 'GET',
+						//To send a list through ajax, traditional = true
+						traditional: true,
+						data : {
+							'playlist_url' : playlist_url,
+							'index_videos' : index_list,
+						},
+						datatype : 'json',
+						success : function(response){
+							list_videos = response.list_downloads
+							for(i=0;i<list_videos.length;i++){
+								window.open(list_videos[i],'_blank')
+								self.focus()
+							}
+						}
+					})
+				}
+			})
+		}
+		else if(input.length>32){
+			console.log(">40")
+			var index_list=[];
+			for(var i=0;i<input.length/4;i++){
+				index_list.push(i+1)
+			}
+			console.log(index_list)
+			$.ajax({
+				url : window.location.origin + "/playlist/download/partial",
+				method : 'GET',
+				//To send a list through ajax, traditional = true
+				traditional: true,
+				data : {
+					'playlist_url' : playlist_url,
+					'index_videos' : index_list,
+				},
+				datatype : 'json',
+				success : function(response){
+					list_videos = response.list_downloads
+					for(i=0;i<list_videos.length;i++){
+						window.open(list_videos[i],'_blank')
+						self.focus()
+					}
+					var index_list=[];
+					for(var i=Math.ceil(input.length/4);i<input.length/2;i++){
+						index_list.push(i+1)
+					}
+					console.log(index_list)
+					$.ajax({
+						url : window.location.origin + "/playlist/download/partial",
+						method : 'GET',
+						//To send a list through ajax, traditional = true
+						traditional: true,
+						data : {
+							'playlist_url' : playlist_url,
+							'index_videos' : index_list,
+						},
+						datatype : 'json',
+						success : function(response){
+							list_videos = response.list_downloads
+							for(i=0;i<list_videos.length;i++){
+								window.open(list_videos[i],'_blank')
+								self.focus()
+							}
+							var index_list=[];
+							for(var i=Math.ceil(input.length/2);i<3*(input.length/4);i++){
+								index_list.push(i+1)
+							}
+							console.log(index_list)
+							$.ajax({
+								url : window.location.origin + "/playlist/download/partial",
+								method : 'GET',
+								//To send a list through ajax, traditional = true
+								traditional: true,
+								data : {
+									'playlist_url' : playlist_url,
+									'index_videos' : index_list,
+								},
+								datatype : 'json',
+								success : function(response){
+									list_videos = response.list_downloads
+									for(i=0;i<list_videos.length;i++){
+										window.open(list_videos[i],'_blank')
+										self.focus()
+									}
+									var index_list=[];
+									for(var i=Math.ceil(3*(input.length/2));i<input.length;i++){
+										index_list.push(i+1)
+									}
+									console.log(index_list)
+									$.ajax({
+										url : window.location.origin + "/playlist/download/partial",
+										method : 'GET',
+										//To send a list through ajax, traditional = true
+										traditional: true,
+										data : {
+											'playlist_url' : playlist_url,
+											'index_videos' : index_list,
+										},
+										datatype : 'json',
+										success : function(response){
+											list_videos = response.list_downloads
+											for(i=0;i<list_videos.length;i++){
+												window.open(list_videos[i],'_blank')
+												self.focus()
+											}
+										}
+									})
+								}
+							})
+						}
+					})
+				}
+			})
+		}
 	}
 
 	function downloadSome(e){
