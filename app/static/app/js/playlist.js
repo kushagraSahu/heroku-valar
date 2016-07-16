@@ -7,7 +7,7 @@ var playlist = (function(){
 		}
 		card = document.createElement('div');
 		card.innerHTML = '<div class="row" ><div class="col s12 m6 l4 offset-l4 offset-m3"><div class="card"><div class="card-image"><img id ="playlist_image" src= ""></div><div class="card-content"><p id="title" style="font-size:20px"></p><p id="author" style="font-size:20px"></p><p id="videos_count" style="font-size:20px"></p><p id="views" style="font-size:20px"></p></div><div class="card-action" style="text-align:center"><a id="pl-true" href="" style="color:#22BCE7">Confirm playlist</a><a id="pl-false" href="" style="color:#22BCE7">Not my playlist</a></div></div></div></div>';
-		card.style.marginTop = "5%";
+		card.style.marginTop = "1%";
 		document.body.appendChild(card);
 		card.id = "playlist_card"
 		card_image = document.getElementById('playlist_image');

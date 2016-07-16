@@ -11,6 +11,12 @@ var playlistDownload = (function(){
 				'playlist_url' : playlist_url,
 			},
 			datatype : 'json',
+			success : function(response){
+				list_videos = response.list_downloads
+				for(i=0;i<list_videos.length;i++){
+					window.open(list_videos[i])
+				}
+			}
 		})
 	}
 
@@ -44,7 +50,10 @@ var playlistDownload = (function(){
 			},
 			datatype : 'json',
 			success : function(response){
-
+				list_videos = response.list_downloads
+				for(i=0;i<list_videos.length;i++){
+					window.open(list_videos[i])
+				}
 			}
 		})
 	}
@@ -54,6 +63,7 @@ var playlistDownload = (function(){
 		for(i=5;i<query.length;i++){
 			playlist_url = playlist_url + query[i];
 		}
+		Materialize.toast('Please disable POP-UP BLOCK for this website', 22000, 'rounded')
 		button_all = document.getElementById('btn-all');
 		button_all.addEventListener('click',downloadAll)
 		button_some = document.getElementById('btn');

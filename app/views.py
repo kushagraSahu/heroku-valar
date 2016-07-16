@@ -297,8 +297,8 @@ def download_video(request):
 			download_links = get_download_links(watch_url)
 			if download_links != None:
 				break
-		webbrowser.open_new(download_links['high_quality_video'])
-		return render(request, 'app/home.html')
+		return redirect(download_links['high_quality_video'])
+		
 
 @require_GET
 def confirm_playlist(request):
@@ -368,12 +368,14 @@ def download_all_videos_playlist(request):
 			video = tr.find('td', {'class': 'pl-video-title'}).find('a')
 			watch_url = video['href']
 			list_watch_urls.append(watch_url)
+		list_download_urls = []
 		for url in list_watch_urls:
-			while True:
-				download_links = get_download_links(url)
-				if download_links != None:
-					break
-			webbrowser.open(download_links['high_quality_video'])
+			download_links = get_download_links(url)
+			list_download_urls.append(download_links['high_quality_video'])
+		data = {
+			'list_downloads': list_download_urls,
+		}
+		return JsonResponse(data)
 
 
 @require_GET
@@ -401,11 +403,14 @@ def download_partial_videos_playlist(request):
 			index+=1
 		print("holo")
 		print(list_watch_urls)
-
+		list_download_urls = []
 		for url in list_watch_urls:
 			download_links = get_download_links(url)	
-			webbrowser.open(download_links['high_quality_video'])
+			list_download_urls.append(download_links['high_quality_video'])
 
-		return HttpResponse()
+		data = {
+			'list_downloads': list_download_urls,
+		}
+		return JsonResponse(data)
 
 
