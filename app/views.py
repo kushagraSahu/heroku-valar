@@ -209,8 +209,6 @@ def download_video(request):
 					continue
 				elif result.find('div', {'class': re.compile(r'yt-lockup-channel')}) != None:
 					continue
-				elif result.find('div', {'class': re.compile(r'yt-lockup-playlist')}) != None:
-					continue
 				else:
 					hit_count = 1
 					while True:
