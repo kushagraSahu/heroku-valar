@@ -145,7 +145,7 @@ var playlistDownload = (function(){
 										self.focus()
 									}
 									var index_list=[];
-									for(var i=Math.ceil(3*(input.length/2));i<input.length;i++){
+									for(var i=Math.ceil(3*(input.length/4));i<input.length;i++){
 										index_list.push(i+1)
 									}
 									console.log(index_list)
