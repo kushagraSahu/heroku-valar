@@ -166,7 +166,7 @@ def get_download_links(watch_url):
 def download_video(request):
 	global hit_threshold
 	abort_override = False
-	query_range = 2
+	query_range = 3
 	refresh_search_range = 2
 	search = request.GET.get('search', '')
 	if search:
