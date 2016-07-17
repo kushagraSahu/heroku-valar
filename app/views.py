@@ -290,14 +290,17 @@ def download_video(request):
 			return render(request, 'app/video_list.html', context)
 			break
 	else:
-		url = request.GET.get('url', '')
-		watch_url = "/" + url.split('/')[3]
-		print(watch_url)
-		while True:
-			download_links = get_download_links(watch_url)
-			if download_links != None:
-				break
-		return redirect(download_links['high_quality_video'])
+		try:
+			url = request.GET.get('url', '')
+			watch_url = "/" + url.split('/')[3]
+			print(watch_url)
+			while True:
+				download_links = get_download_links(watch_url)
+				if download_links != None:
+					break
+			return redirect(download_links['high_quality_video'])
+		except:
+			return render (request, 'app/video_form.html')
 		
 
 @require_GET
