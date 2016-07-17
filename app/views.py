@@ -180,9 +180,9 @@ def download_video(request):
 			for result in list_results:
 				if result.find('div', {'class': 'pyv-afc-ads-container'}):
 					continue
-				elif result.find('div', {'class': re.compile(r'yt-lockup-channel')}) != None:
-					continue
 				elif result.find('div', {'class': re.compile(r'yt-lockup-playlist')}) != None:
+					continue
+				elif result.find('div', {'class': re.compile(r'yt-lockup-channel')}) != None:
 					continue
 				else:
 					hit_count = 1
