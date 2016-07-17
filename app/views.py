@@ -293,6 +293,8 @@ def download_video(request):
 		try:
 			url = request.GET.get('url', '')
 			watch_url = "/" + url.split('/')[3]
+			if not("/watch?v=" in watch_url):
+				watch_url = "/watch?v=" + watch_url[1:]
 			print(watch_url)
 			while True:
 				download_links = get_download_links(watch_url)
