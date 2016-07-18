@@ -145,7 +145,6 @@ def get_download_links(watch_url):
 	# 	}
 	# except:
 		download_url = base_alternate_url + watch_url
-		print(download_url)
 		response=requests.get(download_url)
 		soup = BeautifulSoup(response.text,"lxml")
 		result = soup.find('div',{'id':'Download_Quality'}).find('ul',{'class':'list-group'})
@@ -164,21 +163,13 @@ def get_download_links(watch_url):
 
 		return download_urls
 
-# def get_audio_link(youtube_url):
-# 	audio_search_url = base_audio_download_url + youtube_url
-# 	response = requests.get(audio_search_url)
-# 	soup = BeautifulSoup(response.text, 'lxml')
-# 	partial_audio_link = soup.find('a',{'id':'download'})['href']
-# 	audio_link = base_audio_home + partial_audio_link
-# 	return audio_link
-# =======
-# def get_audio_link(youtube_url):
-# 	audio_search_url = base_audio_download_url + youtube_url
-# 	response = requests.get(audio_search_url)
-# 	soup = BeautifulSoup(response.text, 'lxml')
-# 	partial_audio_link = soup.find('a',{'id':'download'})['href']
-# 	audio_link = base_audio_home + partial_audio_link
-# 	return audio_link
+def get_audio_link(youtube_url):
+	audio_search_url = base_audio_download_url + youtube_url
+	response = requests.get(audio_search_url)
+	soup = BeautifulSoup(response.text, 'lxml')
+	partial_audio_link = soup.find('a',{'id':'download'})['href']
+	audio_link = base_audio_home + partial_audio_link
+	return audio_link
 
 @require_GET
 def download_video(request):
@@ -290,9 +281,7 @@ def download_video(request):
 					low_quality_video_link = download_links['low_quality_video']
 					yt_id = watch_url.split('=')[1]
 					yt_watch_link = base_youtube_watch+watch_url
-
-					# yt_audio_link = get_audio_link(yt_watch_link)
-					# print(yt_audio_link)
+					yt_audio_link = get_audio_link(yt_watch_link)
 					video = {
 						'title': video_title,
 						'thumbnail': base_yt_image + yt_id + '/0.jpg',
@@ -300,9 +289,10 @@ def download_video(request):
 						'views': video_views,
 						'highq_link': high_quality_video_link,
 						'lowq_link': low_quality_video_link,
-						# 'audio' : yt_audio_link,
+						'audio' : yt_audio_link,
 						'time': video_time,
 					}
+					print(video)
 					list_video_details.append(video)
 
 			if not list_video_details:
@@ -310,7 +300,6 @@ def download_video(request):
 			context = {
 				'list_videos': list_video_details,
 			}
-			print(context)
 			return render(request, 'app/video_list.html', context)
 			break
 	else:
