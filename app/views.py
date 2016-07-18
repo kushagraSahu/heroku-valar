@@ -163,13 +163,13 @@ def get_download_links(watch_url):
 
 		return download_urls
 
-def get_audio_link(youtube_url):
-	audio_search_url = base_audio_download_url + youtube_url
-	response = requests.get(audio_search_url)
-	soup = BeautifulSoup(response.text, 'lxml')
-	partial_audio_link = soup.find('a',{'id':'download'})['href']
-	audio_link = base_audio_home + partial_audio_link
-	return audio_link
+# def get_audio_link(youtube_url):
+# 	audio_search_url = base_audio_download_url + youtube_url
+# 	response = requests.get(audio_search_url)
+# 	soup = BeautifulSoup(response.text, 'lxml')
+# 	partial_audio_link = soup.find('a',{'id':'download'})['href']
+# 	audio_link = base_audio_home + partial_audio_link
+# 	return audio_link
 
 @require_GET
 def download_video(request):
@@ -292,14 +292,13 @@ def download_video(request):
 						'audio' : 'https://www.youtubeto.com/?url=' + yt_watch_link,
 						'time': video_time,
 					}
-					print(video)
 					list_video_details.append(video)
 
 			if not list_video_details:
 				continue
 			context = {
 				'list_videos': list_video_details,
-			# }
+			}
 			return render(request, 'app/video_list.html', context)
 			break
 	else:
