@@ -96,7 +96,7 @@
 					<p style="font-size:20px">Duration - {{ video.time }}</p>
 					<p style="font-size:20px">Youtube views - {{ video.views }}</p>
 					<p style="font-size:20px"><a href="{{ video.watch_link }}" target="_blank">Watch on YouTube - <i class="fa fa-youtube-play" aria-hidden="true"></i></a></p>
-					<p style="font-size:20px"><a href="{{ video.audio }}" target="_blank"><i class="fa fa-headphones" aria-hidden="true"></i></a></p>
+					<p style="font-size:20px;color:#50CA12"><a href="{{ video.audio }}" target="_blank">Download Audio - <i class="fa fa-headphones" aria-hidden="true"></i></a></p>
 				</div>
 				<div class="card-action" style="text-align:center;">
 					<a href="{{ video.highq_link }}" onclick="thanksToast(event)" style="justify-content:center" target="_blank">High Quality Download</a>
