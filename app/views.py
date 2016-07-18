@@ -289,9 +289,10 @@ def download_video(request):
 						'views': video_views,
 						'highq_link': high_quality_video_link,
 						'lowq_link': low_quality_video_link,
-						'audio' : 'https://www.youtubeto.com/?url=' + yt_watch_link,
+						# 'audio' : yt_audio_link,
 						'time': video_time,
 					}
+					print(video)
 					list_video_details.append(video)
 
 			if not list_video_details:
