@@ -17,6 +17,9 @@ base_youtube_watch = 'https://www.youtube.com'
 base_yt_url = 'https://www.youtube.com/results?search_query='
 base_savedeo_url = 'https://savedeo.com/download?url='
 base_alternate_url = 'https://youtubemultidownloader.com'
+base_yt_image = 'http://img.youtube.com/vi/'
+base_audio_download_url = 'http://www.youtubeinmp3.com/download/?video='
+base_audio_home = 'http://www.youtubeinmp3.com'
 # base_ss_url = 'https://www.ssyoutube.com'
 global flag_stay_video
 
@@ -161,12 +164,19 @@ def get_download_links(watch_url):
 
 		return download_urls
 
+def get_audio_link(youtube_url):
+	audio_search_url = base_audio_download_url + youtube_url
+	response = requests.get(audio_search_url)
+	soup = BeautifulSoup(response.text, 'lxml')
+	partial_audio_link = soup.find('a',{'id':'download'})['href']
+	audio_link = base_audio_home + partial_audio_link
+	return audio_link
 
 @require_GET
 def download_video(request):
 	global hit_threshold
 	abort_override = False
-	query_range = 3
+	query_range = 5
 	refresh_search_range = 2
 	search = request.GET.get('search', '')
 	if search:
@@ -202,7 +212,7 @@ def download_video(request):
 
 			#To get thumbnail photos of videos
 			video_duration_list = []
-			thumbnail_video_list = []
+			# thumbnail_video_list = []
 			i=0
 			for result in list_results:
 				if result.find('div', {'class': 'pyv-afc-ads-container'}):
@@ -220,8 +230,8 @@ def download_video(request):
 						thumbnail_result = result.find('div', {'class': re.compile(r'yt-lockup-thumbnail')})
 						if thumbnail_result != None:
 							i+=1
-							thumbnail_src = thumbnail_result.find('span', {'class': 'yt-thumb-simple'}).find('img')['src']
-							thumbnail_video_list.append(thumbnail_src)
+							# thumbnail_src = thumbnail_result.find('span', {'class': 'yt-thumb-simple'}).find('img')['src']
+							# thumbnail_video_list.append(thumbnail_src)
 							video_time_no_text = thumbnail_result.find('span', {'class': 'video-time'})
 							if video_time_no_text != None:
 								video_time = video_time_no_text.text
@@ -259,24 +269,29 @@ def download_video(request):
 					video_time = video_duration_list[i]
 				else:
 					video_time = " : "
-				thumbnail_src = thumbnail_video_list[i]
-				img_break = thumbnail_src.split('&')
-				res1 = "w=480"
-				res2 = "w=360"
-				thumbnail_src = img_break[0] + "&" + res1 + "&" + res2
-				for i in range(2,len(img_break)):
-					thumbnail_src = thumbnail_src + "&" + img_break[i]
+				# thumbnail_src = thumbnail_video_list[i]
+				# img_break = thumbnail_src.split('&')
+				# res1 = "w=480"
+				# res2 = "w=360"
+				# thumbnail_src = img_break[0] + "&" + res1 + "&" + res2
+				# for i in range(2,len(img_break)):
+				# 	thumbnail_src = thumbnail_src + "&" + img_break[i]
 				download_links = get_download_links(watch_url)
 				if download_links != None:
 					high_quality_video_link = download_links['high_quality_video']
 					low_quality_video_link = download_links['low_quality_video']
+					yt_id = watch_url.split('=')[1]
+					yt_watch_link = base_youtube_watch+watch_url
+					yt_audio_link = get_audio_link(yt_watch_link)
+					print(yt_audio_link)
 					video = {
 						'title': video_title,
-						'thumbnail': thumbnail_src,
-						'watch_link': base_youtube_watch+watch_url,
+						'thumbnail': base_yt_image + yt_id + '/0.jpg',
+						'watch_link': yt_watch_link,
 						'views': video_views,
 						'highq_link': high_quality_video_link,
 						'lowq_link': low_quality_video_link,
+						'audio' : yt_audio_link,
 						'time': video_time,
 					}
 					list_video_details.append(video)
