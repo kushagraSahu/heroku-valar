@@ -281,8 +281,8 @@ def download_video(request):
 					low_quality_video_link = download_links['low_quality_video']
 					yt_id = watch_url.split('=')[1]
 					yt_watch_link = base_youtube_watch+watch_url
-					yt_audio_link = get_audio_link(yt_watch_link)
-					print(yt_audio_link)
+					# yt_audio_link = get_audio_link(yt_watch_link)
+					# print(yt_audio_link)
 					video = {
 						'title': video_title,
 						'thumbnail': base_yt_image + yt_id + '/0.jpg',
@@ -290,7 +290,7 @@ def download_video(request):
 						'views': video_views,
 						'highq_link': high_quality_video_link,
 						'lowq_link': low_quality_video_link,
-						'audio' : yt_audio_link,
+						'audio' : 'www.youtubeinmp3.com/fetch/?video=' + yt_watch_link,
 						'time': video_time,
 					}
 					print(video)
