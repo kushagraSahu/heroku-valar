@@ -171,6 +171,14 @@ def get_download_links(watch_url):
 # 	partial_audio_link = soup.find('a',{'id':'download'})['href']
 # 	audio_link = base_audio_home + partial_audio_link
 # 	return audio_link
+# =======
+# def get_audio_link(youtube_url):
+# 	audio_search_url = base_audio_download_url + youtube_url
+# 	response = requests.get(audio_search_url)
+# 	soup = BeautifulSoup(response.text, 'lxml')
+# 	partial_audio_link = soup.find('a',{'id':'download'})['href']
+# 	audio_link = base_audio_home + partial_audio_link
+# 	return audio_link
 
 @require_GET
 def download_video(request):
@@ -282,6 +290,7 @@ def download_video(request):
 					low_quality_video_link = download_links['low_quality_video']
 					yt_id = watch_url.split('=')[1]
 					yt_watch_link = base_youtube_watch+watch_url
+
 					# yt_audio_link = get_audio_link(yt_watch_link)
 					# print(yt_audio_link)
 					video = {
