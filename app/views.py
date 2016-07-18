@@ -290,7 +290,7 @@ def download_video(request):
 						'views': video_views,
 						'highq_link': high_quality_video_link,
 						'lowq_link': low_quality_video_link,
-						'audio' : 'www.youtubeinmp3.com/fetch/?video=' + yt_watch_link,
+						'audio' : '//www.youtubeinmp3.com/fetch/?video=' + yt_watch_link,
 						'time': video_time,
 					}
 					print(video)
