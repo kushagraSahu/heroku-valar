@@ -292,9 +292,11 @@ def download_video(request):
 					yt_watch_link = base_youtube_watch+watch_url
 					# yt_audio_link = get_audio_link(yt_watch_link)
 					# print(yt_audio_link)
+					# live_video = 'https://www.youtube.com/embed/' + yt_id
 					video = {
 						'title': video_title,
 						'thumbnail': base_yt_image + yt_id + '/0.jpg',
+						# 'play_live_link': live_video,
 						'watch_link': yt_watch_link,
 						'views': video_views,
 						'highq_link': high_quality_video_link,
