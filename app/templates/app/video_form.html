@@ -51,6 +51,14 @@
 			color: white;
 			font-weight: lighter;
 		}
+		#icon_prefix2{
+			text-align: center;
+			padding-top: 3%;
+			font-size: 22px;
+			font-family: "Montserrat", sans-serif;
+			color: white;
+			font-weight: lighter;
+		}
 		label{
 			padding-top: 3%;
 			font-size: 26px;
@@ -117,8 +125,8 @@
 	</div>
 	<div class="row" style="margin-top:2%" >
 		<form class ="input-field col m12 s12 l10 offset-l1" action="{% url 'download-video' %}" method="GET">
-			<input id="icon_prefix" type="url" name="url" autocomplete="off" class="validate" spellcheck="false" style="font-size:22px">
-			<label for="icon_prefix" style="font-size:22px;color:white">Insert YouTube Video Link (only for Video)</label>
+			<input id="icon_prefix2" type="url" name="url" autocomplete="off" class="validate" spellcheck="false" style="font-size:22px">
+			<label for="icon_prefix2" style="font-size:22px;color:white">Insert YouTube Video Link (only for Video)</label>
 		</form>
 	</div>
 	<div id="bg">
@@ -133,6 +141,28 @@
 						Materialize.toast('Loading the results in a moment :)',3000,'rounded')
 					},3000)
 				},2000)
+			}
+		}
+		function checkYouTubeLink(e){
+			if (e.keyCode == 13) {
+				link_input = document.getElementById('icon_prefix2')
+				var Url = link_input.value;
+				console.log(Url)
+				var matches = Url.match(/watch\?v=([a-zA-Z0-9\-_]+)/);
+				if (matches){
+					console.log("Good")
+					$.ajax({
+						url : window.location.origin + "/video/download/",
+						method : 'GET',
+						data : {
+							'url' : Url,
+						},
+						datatype : 'json',
+					})
+				}
+				else {
+					Materialize.toast('Please enter a valid YouTube url. Thanks :)', 15000, 'rounded');
+				}
 			}
 		}
 	</script>

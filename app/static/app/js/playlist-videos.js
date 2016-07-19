@@ -2,7 +2,7 @@ var playlistDownload = (function(){
 	var playlist_url = "";
 	function downloadAll(e){
 		e.preventDefault();
-		setTimeout(function(){Materialize.toast('This may take some time. Be patient', 35000, 'rounded')},2000);
+		setTimeout(function(){Materialize.toast('This may take some time. Be patient', 50000, 'rounded')},2000);
 		var input = $("input[id='mycheckbox']")
 		if (input.length <= 16){
 			console.log("<16")

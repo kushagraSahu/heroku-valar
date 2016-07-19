@@ -1,0 +1,48 @@
+{% load staticfiles %}
+<html>
+<head>
+	<title>OOPS!</title>
+	<link rel="shortcut icon" href="{% static 'app/images/title1.png' %}" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+	<link href = "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+	<link href='https://fonts.googleapis.com/css?family=Montserrat:700' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+</head>
+<body>
+	<style>
+		#bg {
+			position: fixed; 
+			top: -50%; 
+			left: -50%; 
+			width: 200%; 
+			height: 200%;
+			z-index: -2;
+		}
+		#bg img {
+			position: absolute; 
+			top: 0; 
+			left: 0; 
+			right: 0; 
+			bottom: 0; 
+			margin: auto; 
+			min-width: 50%;
+			min-height: 50%;
+		}
+		#back a{
+			background-color: rgba(215, 40, 148, 0.74);
+			font-family: "Montserrat", sans-serif;
+			font-weight: bolder;
+			color: white;
+		}
+	</style>
+	<div id="bg">
+		<img src="{% static "app/images/Elegant_Background-7.jpg" %}" alt="">
+	</div>
+	<div style="text-align:center;margin-bottom:150px;margin-top:150px"><p style="font-size:450%;font-weight:bolder;font-family: "Montserrat", sans-serif;">Please Enter a valid song/video!</p></div>
+	<div id="back" style="margin-bottom: 2%;">
+		<a class="waves-effect waves-light btn-large" style="width:50%;left: 25%" href="javascript:history.back()">Search Video/Song</a>
+	</div>
+</body>
+</html>
