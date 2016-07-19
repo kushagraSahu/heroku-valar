@@ -152,13 +152,16 @@ def get_download_links(watch_url):
 		soup = BeautifulSoup(response.text,"lxml")
 		result = soup.find('div',{'id':'Download_Quality'}).find('ul',{'class':'list-group'})
 		list_download_links = result.findAll('li',{'class':'list-group-item'})[1].findAll('a')
+		lowq_download_url = ''
 		if list_download_links[0].text == "720P" or list_download_links[0].text == "360P":
 			highq_download_url = list_download_links[0]['href']
-		if list_download_links[1].text == "360P":
-			lowq_download_url = list_download_links[1]['href']
-		else:
-			lowq_download_url = highq_download_url
-
+		try:
+			if list_download_links[1].text == "360P":
+				lowq_download_url = list_download_links[1]['href']
+			else:
+				lowq_download_url = highq_download_url
+		except:
+			pass
 		download_urls = {
 			'high_quality_video': highq_download_url,
 			'low_quality_video' : lowq_download_url
