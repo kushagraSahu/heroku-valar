@@ -49,7 +49,6 @@ var playlist = (function(){
 	}
 
 	function confirmPlaylist2(e){
-		e.preventDefault();
 		if (e.keyCode == 13){
 			playlist_search = document.getElementById('icon_prefix');
 			playlist_url = playlist_search.value;
