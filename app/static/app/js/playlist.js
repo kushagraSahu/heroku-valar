@@ -27,7 +27,6 @@ var playlist = (function(){
 	}
 
 	function confirmPlaylist(e){
-		e.preventDefault();
 		playlist_search = document.getElementById('icon_prefix');
 		playlist_url = playlist_search.value;
 		$.ajax({
@@ -50,6 +49,7 @@ var playlist = (function(){
 
 	function confirmPlaylist2(e){
 		if (e.keyCode == 13){
+			e.preventDefault()
 			playlist_search = document.getElementById('icon_prefix');
 			playlist_url = playlist_search.value;
 			$.ajax({
