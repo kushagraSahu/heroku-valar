@@ -1,0 +1,64 @@
+#bg {
+	position: fixed; 
+	top: -50%; 
+	left: -50%; 
+	width: 200%; 
+	height: 200%;
+	z-index: -2;
+}
+#bg img {
+	position: absolute; 
+	top: 0; 
+	left: 0; 
+	right: 0; 
+	bottom: 0; 
+	margin: auto; 
+	min-width: 50%;
+	min-height: 50%;
+}
+.home {
+	margin-top: 1%;
+	height: 20%;
+}
+
+.home p {
+	text-align: center;
+	padding-top: 5%;
+	font-size: 50px;
+	font-family: "Montserrat", sans-serif;
+	font-weight: bolder;
+	color: white;
+}
+nav{
+	position: fixed;
+	color: #fff;
+	background-color: rgba(253, 200, 69, 0.62);
+	width: 100%;
+	top:0;
+	text-align: center;
+	z-index: 3;
+	font-family: "Montserrat", sans-serif;
+	font-weight: bolder;
+	color: white;
+}
+#btn button{
+	background-color: rgba(253, 200, 69, 0.62);
+	font-family: "Montserrat", sans-serif;
+	font-weight: bolder;
+	color: white;
+	height: 8%;
+	border-radius: 28px 28px;
+}
+#btn-all button{
+	background-color: rgba(253, 200, 69, 0.62);
+	font-family: "Montserrat", sans-serif;
+	font-weight: bolder;
+	color: white;
+	height: 8%;
+	border-radius: 28px 28px;
+}
+@media screen and (max-width: 1000px) {
+	.home {
+		height: 18%;
+	}
+}
