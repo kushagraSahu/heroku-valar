@@ -29,6 +29,13 @@
 	font-weight: bolder;
 	color: white;
 }
+#icon_prefix{
+	text-align: center;
+	font-size: 22px;
+	font-family: "Montserrat", sans-serif;
+	color: white;
+	font-weight: lighter;
+}
 nav{
 	position: fixed;
 	color: #fff;

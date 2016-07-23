@@ -9,6 +9,8 @@
 	<link href='https://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+	<link href="http://code.jquery.com/ui/1.10.2/themes/mint-choc/jquery-ui.css" rel="Stylesheet"></link>
+	<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
 	<link rel="stylesheet" type="text/css" href="{% static 'app/css/video_list.css' %}" />
 </head>
 <body>
@@ -16,9 +18,11 @@
 
 	<nav>
 		<div class="nav-wrapper">
-			<div class="col s12">
-				<a href="{% url 'home' %}" class="breadcrumb">Home</a>
-				<a href="{% url 'video' %}" class="breadcrumb">Song/Video</a>
+			<div class = "col l10" style="display:flex;justify-content:center">
+				<form class ="input-field col m10 offset-m1 s12 l8 offset-l2" action="{% url 'download-video' %}" method="GET">
+					<input id="icon_prefix" type="text" name="search" class="validate" autocomplete="off" spellcheck="false" onkeypress="loadingToast(event)" placeholder="Search Again ...">
+				</form>
+				<i class="fa fa-2x fa-search" aria-hidden="true"></i>
 			</div>
 		</div>
 	</nav>
@@ -57,6 +61,16 @@
 		<a class="waves-effect waves-light btn-large" style="width:40%;left: 30%" href="javascript:history.back()">Search More Songs/Videos!</a>
 	</div>
 	<script>
+		function loadingToast(e){
+			if (e.keyCode == 13) {
+				setInterval(function(){console.log('hi')}, 1000)
+				setTimeout(function(){
+					setInterval(function(){
+						Materialize.toast('Loading the results in a moment :)',3000,'rounded')
+					},3000)
+				},2000)
+			}
+		}
 		function thanksToast(e){
 			setTimeout(function(){
 				Materialize.toast('Valar Downloadis ;)', 20000, 'rounded')
@@ -65,6 +79,29 @@
 				Materialize.toast('Ready for the next Video or maybe a Playlist?', 16000, 'rounded')
 			}, 4000);
 		}
+		var suggestCallBack; // global var for autocomplete jsonp
+
+		$(document).ready(function () {
+			$("#icon_prefix").autocomplete({
+				source: function(request, response) {
+					$.getJSON("http://suggestqueries.google.com/complete/search?callback=?",
+					{ 
+                  		"hl":"en", // Language                  
+                  		"jsonp":"suggestCallBack", // jsonp callback function name
+                  		"q":request.term, // query term
+                  		"client":"youtube" // force youtube style response, i.e. jsonp
+                  	});
+					suggestCallBack = function (data) {
+						var suggestions = [];
+						$.each(data[1], function(key, val) {
+							suggestions.push({"value":val[0]});
+						});
+                		suggestions.length = 6; // prune suggestions list to only 6 items
+                		response(suggestions);
+                	};
+                },
+            });
+		});
 	</script>
 	<script>
 		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
