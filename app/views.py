@@ -116,7 +116,7 @@ def playlist(request):
 # Scraping from Savdeo using just BS. 
 def get_download_links(watch_url):
 	download_url = base_savedeo_url + base_youtube_watch + watch_url
-	# print(download_url)
+	print(download_url)
 	response = requests.get(download_url)
 	soup = BeautifulSoup(response.text, 'lxml')
 	# try:
@@ -285,7 +285,10 @@ def download_video(request):
 				# thumbnail_src = img_break[0] + "&" + res1 + "&" + res2
 				# for i in range(2,len(img_break)):
 				# 	thumbnail_src = thumbnail_src + "&" + img_break[i]
-				download_links = get_download_links(watch_url)
+				try:
+					download_links = get_download_links(watch_url)
+				except:
+					download_links=None
 				if download_links != None:
 					high_quality_video_link = download_links['high_quality_video']
 					low_quality_video_link = download_links['low_quality_video']
