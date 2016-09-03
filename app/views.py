@@ -289,6 +289,7 @@ def download_video(request):
 					download_links = get_download_links(watch_url)
 				except:
 					download_links=None
+					print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaa")
 				if download_links != None:
 					high_quality_video_link = download_links['high_quality_video']
 					low_quality_video_link = download_links['low_quality_video']
