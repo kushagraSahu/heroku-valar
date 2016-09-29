@@ -20,9 +20,9 @@
 		<div class="nav-wrapper">
 			<div class = "col l10" style="display:flex;justify-content:center">
 				<form class ="input-field col m10 offset-m1 s12 l8 offset-l2" action="{% url 'download-video' %}" method="GET">
-					<input id="icon_prefix" type="text" name="search" class="validate" autocomplete="off" spellcheck="false" onkeypress="loadingToast(event)" placeholder="Search Again ...">
+					<input id="icon_prefix" type="text" name="search" class="validate" autocomplete="off" spellcheck="false" onkeypress="loadingToast(event)" onfocus="restoreWhite(event)" placeholder="Search Again ...">
 				</form>
-				<i class="fa fa-2x fa-search" aria-hidden="true"></i>
+				<i id="icon-search" class="fa fa-2x fa-search" aria-hidden="true"></i>
 			</div>
 		</div>
 	</nav>
@@ -58,9 +58,52 @@
 		<img src="{% static "app/images/Elegant_Background-13.jpg" %}" alt="">
 	</div>
 	<div id="back" style="margin-bottom: 2%;">
-		<a class="waves-effect waves-light btn-large" style="width:40%;left: 30%" href="javascript:history.back()">Search More Songs/Videos!</a>
+		<a class="waves-effect waves-light btn-large" style="width:40%;left: 30%" onclick="focusSearch(event)">Search More Songs/Videos!</a>
 	</div>
 	<script>
+		var interval_id, speed_point, el, win_ht, delta;
+		function scroll(){
+			if(window.scrollY === 0){
+				clearInterval(interval_id);
+			}
+			else if(window.scrollY > speed_point){
+				delta = -100;
+			}
+			else if(window.scrollY < speed_point){
+				delta = -65;
+			}
+			if(window.scrollY < delta){
+				delta = -window.scrollY;
+			}
+			window.scrollTo(window.scrollX, window.scrollY + delta);
+		}
+		function clicked(e){
+			e.preventDefault();
+			win_ht =  Math.max(document.documentElement.clientHeight,
+				document.body.scrollHeight,
+				document.documentElement.scrollHeight,
+				document.body.offsetHeight,
+				document.documentElement.offsetHeight);
+			speed_point = win_ht/6;
+			interval_id = setInterval(scroll, 50);
+		}
+
+		function restoreWhite(e){
+			$("#icon-search").css({
+				'color': 'white',
+				'font-weight': 'bolder'
+			})
+		}
+
+		function focusSearch(e){
+			console.log("YOOOO")
+			$("#icon-search").css({
+				'color': 'aqua',
+				'font-weight': 'bolder'
+			})
+			clicked(e);
+			// $("#icon_prefix").focus()
+		}
 		function loadingToast(e){
 			if (e.keyCode == 13) {
 				setInterval(function(){console.log('hi')}, 1000)
