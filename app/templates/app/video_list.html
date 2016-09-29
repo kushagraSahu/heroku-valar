@@ -67,10 +67,10 @@
 				clearInterval(interval_id);
 			}
 			else if(window.scrollY > speed_point){
-				delta = -100;
+				delta = -150;
 			}
 			else if(window.scrollY < speed_point){
-				delta = -65;
+				delta = -15;
 			}
 			if(window.scrollY < delta){
 				delta = -window.scrollY;
@@ -84,7 +84,7 @@
 				document.documentElement.scrollHeight,
 				document.body.offsetHeight,
 				document.documentElement.offsetHeight);
-			speed_point = win_ht/6;
+			speed_point = win_ht/16;
 			interval_id = setInterval(scroll, 50);
 		}
 
