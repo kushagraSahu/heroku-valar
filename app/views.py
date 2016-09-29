@@ -319,6 +319,7 @@ def download_video(request):
 				'list_videos': list_video_details,
 			}
 			return render(request, 'app/video_list.html', context)
+			
 			break
 	else:
 		try:
