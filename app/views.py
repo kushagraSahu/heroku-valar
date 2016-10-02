@@ -13,7 +13,6 @@ from django.core.urlresolvers import resolve
 # Create your views here.
 
 #global variables
-
 base_youtube_watch = 'https://www.youtube.com'
 base_yt_url = 'https://www.youtube.com/results?search_query='
 base_savedeo_url = 'https://savedeo.com/download?url='
