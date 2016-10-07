@@ -11,7 +11,6 @@ from bs4 import BeautifulSoup
 from django.core.urlresolvers import resolve
 
 # Create your views here.
-
 #global variables
 
 base_youtube_watch = 'https://www.youtube.com'
