@@ -115,38 +115,41 @@ def playlist(request):
 # 		return None
 
 # Scraping from Savdeo using just BS. 
-def get_download_links(watch_url):
-	download_url = base_savedeo_url + base_youtube_watch + watch_url
-	print(download_url)
-	response = requests.get(download_url)
-	soup = BeautifulSoup(response.text, 'lxml')
-	# try:
-	table = soup.find('div',{'class':'clip'}).find('table')
-	table_body = table.find('tbody')
-	list_links = table_body.findAll('tr')
-	list_download_links = []
+# def get_download_links(watch_url):
+# 	print(watch_url)
+# 	v = watch_url.split('=')[1];
+# 	print(v)
+# 	download_url = base_savedeo_url + base_youtube_watch + watch_url
+# 	print(download_url)
+# 	response = requests.get(download_url)
+# 	soup = BeautifulSoup(response.text, 'lxml')
+# 	# try:
+# 	table = soup.find('div',{'class':'clip'}).find('table')
+# 	table_body = table.find('tbody')
+# 	list_links = table_body.findAll('tr')
+# 	list_download_links = []
 		
-	i=0 
-	for link in list_links:
-		video_format = link.findAll('td')[0].text
-		if video_format == "mp4":
-			download_link = link.findAll('td')[1].find('a')['href']
-			list_download_links.append(download_link)
-		i+=1
-		if i>1:
-			break
+# 	i=0 
+# 	for link in list_links:
+# 		video_format = link.findAll('td')[0].text
+# 		if video_format == "mp4":
+# 			download_link = link.findAll('td')[1].find('a')['href']
+# 			list_download_links.append(download_link)
+# 		i+=1
+# 		if i>1:
+# 			break
 		
-	highq_download_url = list_download_links[0]
+# 	highq_download_url = list_download_links[0]
 		
-	if len(list_download_links) != 1:
-		lowq_download_url = list_download_links[1]
-	else:
-		lowq_download_url = highq_download_url
+# 	if len(list_download_links) != 1:
+# 		lowq_download_url = list_download_links[1]
+# 	else:
+# 		lowq_download_url = highq_download_url
 
-	download_urls = {
-		'high_quality_video': highq_download_url,
-		'low_quality_video' : lowq_download_url
-	}
+# 	download_urls = {
+# 		'high_quality_video': highq_download_url,
+# 		'low_quality_video' : lowq_download_url
+# 	}
 	#Youtubemultidownloader is now JS loaded.
 	# except:
 	# 	download_url = base_alternate_url + watch_url
@@ -171,6 +174,33 @@ def get_download_links(watch_url):
 
 	return download_urls
 
+def foo_download_links(watch_url, playlist):
+	v = watch_url.split('=')[1]
+	low_quality_video_link = 'http://voyoutube.com/640mp4/host?h=Valar-Downloadis&v=' + v
+	high_quality_video_link = 'http://voyoutube.com/1080mp4/host?h=Valar-Downloadis&v=' + v
+
+	if not playlist:
+		r = requests.get(low_quality_video_link)
+		s = BeautifulSoup(r.text, 'lxml')
+		u = s.find('a')['onclick']
+		u = u[15:-2]
+		low_quality_video = u
+	else:
+		low_quality_video = "";
+
+	r = requests.get(high_quality_video_link)
+	s = BeautifulSoup(r.text, 'lxml')
+	u = s.find('a')['onclick']
+	u = u[15:-2]
+	high_quality_video = u
+
+	download_urls = {
+		'high_quality_video': high_quality_video,
+		'low_quality_video' : low_quality_video,
+	}
+	print(download_urls)
+	return download_urls
+
 def get_audio_link(youtube_url):
 	audio_search_url = base_audio_download_url + youtube_url
 	response = requests.get(audio_search_url)
@@ -183,7 +213,7 @@ def get_audio_link(youtube_url):
 def download_video(request):
 	global hit_threshold
 	abort_override = False
-	query_range = 6
+	query_range = 8
 	refresh_search_range = 2
 	search = request.GET.get('search', '')
 	if search:
@@ -287,7 +317,7 @@ def download_video(request):
 				# for i in range(2,len(img_break)):
 				# 	thumbnail_src = thumbnail_src + "&" + img_break[i]
 				try:
-					download_links = get_download_links(watch_url)
+					download_links = foo_download_links(watch_url, False)
 				except:
 					download_links=None
 					print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaa")
@@ -330,7 +360,7 @@ def download_video(request):
 				watch_url = "/watch?v=" + watch_url[1:]
 			print(watch_url)
 			while True:
-				download_links = get_download_links(watch_url)
+				download_links = foo_download_links(watch_url, False)
 				if download_links != None:
 					break
 			return redirect(download_links['high_quality_video'])
@@ -412,7 +442,7 @@ def download_all_videos_playlist(request):
 			list_watch_urls.append(watch_url)
 		list_download_urls = []
 		for url in list_watch_urls:
-			download_links = get_download_links(url)
+			download_links = foo_download_links(url, True)
 			list_download_urls.append(download_links['high_quality_video'])
 		data = {
 			'list_downloads': list_download_urls,
@@ -447,12 +477,15 @@ def download_partial_videos_playlist(request):
 		print(list_watch_urls)
 		list_download_urls = []
 		for url in list_watch_urls:
-			download_links = get_download_links(url)	
+			download_links = foo_download_links(url, True)	
 			list_download_urls.append(download_links['high_quality_video'])
 
 		data = {
 			'list_downloads': list_download_urls,
 		}
 		return JsonResponse(data)
+
+
+
 
 
