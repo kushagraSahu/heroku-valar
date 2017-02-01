@@ -213,7 +213,7 @@ def get_audio_link(youtube_url):
 def download_video(request):
 	global hit_threshold
 	abort_override = False
-	query_range = 8
+	query_range = 7
 	refresh_search_range = 2
 	search = request.GET.get('search', '')
 	if search:
