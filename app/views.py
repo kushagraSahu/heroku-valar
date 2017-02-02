@@ -188,13 +188,14 @@ def foo_download_links(watch_url, playlist):
 	# else:
 	# 	low_quality_video = "";
 	# 2 requests per video taking a lot of time, so disabling 360p download link.
-	low_quality_video = ""
 
 	r = requests.get(high_quality_video_link)
 	s = BeautifulSoup(r.text, 'lxml')
 	u = s.find('a')['onclick']
 	u = u[15:-2]
 	high_quality_video = u
+
+	low_quality_video = high_quality_video
 
 	download_urls = {
 		'high_quality_video': high_quality_video,
