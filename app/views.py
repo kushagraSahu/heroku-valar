@@ -171,7 +171,7 @@ def foo_download_links(watch_url):
 	# 		'high_quality_video': highq_download_url,
 	# 		'low_quality_video' : lowq_download_url
 	# 	}
-
+	print(download_urls)
 	return download_urls
 
 def get_download_links(watch_url, playlist):
@@ -229,6 +229,7 @@ def download_video(request):
 				break
 			watch_result_list = []
 			i=0
+			print(len(list_results))
 			for result in list_results:
 				if result.find('div', {'class': 'pyv-afc-ads-container'}):
 					continue
@@ -251,7 +252,8 @@ def download_video(request):
 						
 					if(i>query_range):
 						break
-
+			# print(watch_result_list)
+			# print(len(watch_result_list))
 			#To get thumbnail photos of videos
 			video_duration_list = []
 			# thumbnail_video_list = []
@@ -283,6 +285,7 @@ def download_video(request):
 							
 					if(i>query_range):
 						break
+			# print(video_duration_list)
 			list_video_details = []
 			for i in range(0,query_range+1):
 				bool_views = False
@@ -292,12 +295,13 @@ def download_video(request):
 					if hit_count > hit_threshold:
 						break
 					try:
-						video_views_no_text = watch_result_list[i].find('ul', {'class': 'yt-lockup-meta-info'})
+						video_views_no_text = watch_result_list[i].findAll('ul', {'class': 'yt-lockup-meta-info'})[1]
 						if video_views_no_text != None:
 							try:
 								video_views = video_views_no_text.findAll('li')[1].text
 							except:
 								bool_views = True
+								# print("break")
 							break
 						hit_count+=1
 					except:
@@ -305,8 +309,11 @@ def download_video(request):
 				if hit_count > hit_threshold or bool_views:
 					continue
 				video_views = video_views.split()[0]
+				# video_views = "-"
 				watch_url = watch_result_list[i].find('h3', {'class': 'yt-lockup-title'}).find('a')['href']
+				print(watch_url)
 				video_title = watch_result_list[i].find('h3', {'class': 'yt-lockup-title'}).find('a').text
+				# print(video_title)
 				if len(video_duration_list) > i :
 					video_time = video_duration_list[i]
 				else:
@@ -320,6 +327,8 @@ def download_video(request):
 				# 	thumbnail_src = thumbnail_src + "&" + img_break[i]
 				try:
 					download_links = foo_download_links(watch_url)
+					print("DL")
+					print(download_links)
 				except:
 					download_links=None
 					print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaa")
@@ -346,10 +355,12 @@ def download_video(request):
 					list_video_details.append(video)
 
 			if not list_video_details:
+				print("HO!")	
 				continue
 			context = {
 				'list_videos': list_video_details,
 			}
+			print(list_video_details)
 			return render(request, 'app/video_list.html', context)
 			
 			break
