@@ -258,6 +258,7 @@ def download_video(request):
 			video_duration_list = []
 			# thumbnail_video_list = []
 			i=0
+			# print("Yo")
 			for result in list_results:
 				if result.find('div', {'class': 'pyv-afc-ads-container'}):
 					continue
@@ -285,7 +286,7 @@ def download_video(request):
 							
 					if(i>query_range):
 						break
-			# print(video_duration_list)
+			print(video_duration_list)
 			list_video_details = []
 			for i in range(0,query_range+1):
 				bool_views = False
@@ -295,7 +296,7 @@ def download_video(request):
 					if hit_count > hit_threshold:
 						break
 					try:
-						video_views_no_text = watch_result_list[i].findAll('ul', {'class': 'yt-lockup-meta-info'})[1]
+						video_views_no_text = watch_result_list[i].find('ul', {'class': 'yt-lockup-meta-info'})
 						if video_views_no_text != None:
 							try:
 								video_views = video_views_no_text.findAll('li')[1].text
@@ -303,14 +304,20 @@ def download_video(request):
 								bool_views = True
 								# print("break")
 							break
+						# print("lol")
 						hit_count+=1
 					except:
 						bool_views = True
+						# print("pleh")
 				if hit_count > hit_threshold or bool_views:
+					print("hmm")	
 					continue
+
 				video_views = video_views.split()[0]
+				# print(video_views)
 				# video_views = "-"
 				watch_url = watch_result_list[i].find('h3', {'class': 'yt-lockup-title'}).find('a')['href']
+				# print("here")
 				print(watch_url)
 				video_title = watch_result_list[i].find('h3', {'class': 'yt-lockup-title'}).find('a').text
 				# print(video_title)
