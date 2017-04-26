@@ -116,11 +116,8 @@ def playlist(request):
 
 # Scraping from Savdeo using just BS. 
 def foo_download_links(watch_url):
-	print(watch_url)
 	v = watch_url.split('=')[1];
-	print(v)
 	download_url = base_savedeo_url + base_youtube_watch + watch_url
-	print(download_url)
 	response = requests.get(download_url)
 	soup = BeautifulSoup(response.text, 'lxml')
 	# try:
@@ -150,6 +147,10 @@ def foo_download_links(watch_url):
 		'high_quality_video': highq_download_url,
 		'low_quality_video' : lowq_download_url
 	}
+
+	print(download_urls)
+	return download_urls
+	
 	#Youtubemultidownloader is now JS loaded.
 	# except:
 	# 	download_url = base_alternate_url + watch_url
@@ -171,8 +172,6 @@ def foo_download_links(watch_url):
 	# 		'high_quality_video': highq_download_url,
 	# 		'low_quality_video' : lowq_download_url
 	# 	}
-	print(download_urls)
-	return download_urls
 
 def get_download_links(watch_url, playlist):
 	v = watch_url.split('=')[1]
@@ -224,26 +223,33 @@ def download_video(request):
 			response = requests.get(search_url)
 			soup = BeautifulSoup(response.text,"lxml")
 			list_results = soup.find('div', {'id': 'results'}).find('ol',{'class':'section-list'}).find('ol',{'class':'item-section'}).findAll('li')
+			
 			if len(list_results) == 1:
 				return render(request, 'app/oops.html')
 				break
+			
 			watch_result_list = []
 			i=0
-			print(len(list_results))
+
 			for result in list_results:
 				if result.find('div', {'class': 'pyv-afc-ads-container'}):
 					continue
+				
 				elif result.find('div', {'class': re.compile(r'yt-lockup-channel')}) != None:
 					continue
+				
 				elif result.find('div', {'class': re.compile(r'yt-lockup-playlist')}) != None:
 					continue
+				
 				else:
 					hit_count = 1
 					while True:
 						if hit_count > hit_threshold:
 							abort_override = True
 							break
+						
 						watch_result = result.find('div', {'class': "yt-lockup-content"})
+						
 						if watch_result != None:
 							i+=1
 							watch_result_list.append(watch_result)
@@ -252,46 +258,50 @@ def download_video(request):
 						
 					if(i>query_range):
 						break
-			# print(watch_result_list)
-			# print(len(watch_result_list))
 			#To get thumbnail photos of videos
 			video_duration_list = []
 			# thumbnail_video_list = []
 			i=0
-			# print("Yo")
 			for result in list_results:
 				if result.find('div', {'class': 'pyv-afc-ads-container'}):
 					continue
+				
 				elif result.find('div', {'class': re.compile(r'yt-lockup-channel')}) != None:
 					continue
+				
 				elif result.find('div', {'class': re.compile(r'yt-lockup-playlist')}) != None:
 					continue
+				
 				else:
 					hit_count = 1
 					while True:
 						if hit_count > hit_threshold:
 							abort_override = True
 							break
+						
 						thumbnail_result = result.find('div', {'class': re.compile(r'yt-lockup-thumbnail')})
 						if thumbnail_result != None:
 							i+=1
 							# thumbnail_src = thumbnail_result.find('span', {'class': 'yt-thumb-simple'}).find('img')['src']
 							# thumbnail_video_list.append(thumbnail_src)
 							video_time_no_text = thumbnail_result.find('span', {'class': 'video-time'})
+							
 							if video_time_no_text != None:
 								video_time = video_time_no_text.text
 								video_duration_list.append(video_time)
 							break
+						
 						hit_count += 1
 							
 					if(i>query_range):
 						break
-			print(video_duration_list)
+			
 			list_video_details = []
 			for i in range(0,query_range+1):
 				bool_views = False
 				video = {}
 				hit_count = 1
+				
 				while True:
 					if hit_count > hit_threshold:
 						break
@@ -302,25 +312,19 @@ def download_video(request):
 								video_views = video_views_no_text.findAll('li')[1].text
 							except:
 								bool_views = True
-								# print("break")
 							break
-						# print("lol")
 						hit_count+=1
 					except:
 						bool_views = True
-						# print("pleh")
+				
 				if hit_count > hit_threshold or bool_views:
-					print("hmm")	
 					continue
 
 				video_views = video_views.split()[0]
-				# print(video_views)
-				# video_views = "-"
 				watch_url = watch_result_list[i].find('h3', {'class': 'yt-lockup-title'}).find('a')['href']
-				# print("here")
 				print(watch_url)
 				video_title = watch_result_list[i].find('h3', {'class': 'yt-lockup-title'}).find('a').text
-				# print(video_title)
+				
 				if len(video_duration_list) > i :
 					video_time = video_duration_list[i]
 				else:
@@ -334,11 +338,10 @@ def download_video(request):
 				# 	thumbnail_src = thumbnail_src + "&" + img_break[i]
 				try:
 					download_links = foo_download_links(watch_url)
-					print("DL")
-					print(download_links)
 				except:
 					download_links=None
 					print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaa")
+				
 				if download_links != None:
 					high_quality_video_link = download_links['high_quality_video']
 					low_quality_video_link = download_links['low_quality_video']
@@ -358,6 +361,7 @@ def download_video(request):
 						'audio' : '//www.youtubeinmp3.com/fetch/?video=' + yt_watch_link,
 						'time': video_time,
 					}
+					
 					print(video)
 					list_video_details.append(video)
 
@@ -367,7 +371,8 @@ def download_video(request):
 			context = {
 				'list_videos': list_video_details,
 			}
-			print(list_video_details)
+			
+			# print(list_video_details)
 			return render(request, 'app/video_list.html', context)
 			
 			break
@@ -379,6 +384,7 @@ def download_video(request):
 			if not("/watch?v=" in watch_url):
 				watch_url = "/watch?v=" + watch_url[1:]
 			print(watch_url)
+			
 			while True:
 				download_links = foo_download_links(watch_url, False)
 				if download_links != None:
@@ -460,10 +466,12 @@ def download_all_videos_playlist(request):
 			video = tr.find('td', {'class': 'pl-video-title'}).find('a')
 			watch_url = video['href']
 			list_watch_urls.append(watch_url)
+		
 		list_download_urls = []
 		for url in list_watch_urls:
 			download_links = foo_download_links(url, True)
 			list_download_urls.append(download_links['high_quality_video'])
+		
 		data = {
 			'list_downloads': list_download_urls,
 		}
@@ -493,8 +501,9 @@ def download_partial_videos_playlist(request):
 				watch_url = watch_url.split('&')[0]
 				list_watch_urls.append(watch_url)
 			index+=1
-		print("holo")
+		
 		print(list_watch_urls)
+		
 		list_download_urls = []
 		for url in list_watch_urls:
 			download_links = foo_download_links(url, True)	
